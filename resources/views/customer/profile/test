@@ -1,0 +1,162 @@
+ <!-- Topbar -->
+ <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+
+     <!-- Sidebar Toggle -->
+     <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+
+         <i class="fa fa-bars"></i>
+     </button>
+
+     <!-- Right Navbar -->
+     <ul class="navbar-nav ml-auto">
+
+         <!-- User Dropdown -->
+         @php
+             $authUserImage = Auth::user()->image;
+         @endphp
+
+
+         <li class="nav-item dropdown no-arrow">
+
+             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown">
+{{-- 
+                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">
+                     Customer
+                 </span> --}}
+                 @if ($authUserImage != null)
+                     <img class="img-profile rounded-circle" src="{{ $authUserImage }}">
+                 @else
+                     <img class="img-profile rounded-circle"
+                         src="https://cdn-icons-png.flaticon.com/512/149/149071.png">
+                 @endif
+
+             </a>
+
+             <!-- Dropdown Menu -->
+             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in">
+
+                 <a class="dropdown-item" href="{{url('/customer/profile-view')}}">
+                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                     Profile
+                 </a>
+
+                 <a class="dropdown-item" href="{{url('/customer/view-credentials')}}">
+                     <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+                      Credenatial Settings
+                 </a>
+
+                 <div class="dropdown-divider"></div>
+
+                 <a class="dropdown-item" href="{{ url('/customer/logout') }}">
+                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                     Logout
+                 </a>
+
+             </div>
+
+         </li>
+
+     </ul>
+
+ </nav>
+ <!-- End Topbar -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <!-- Topbar -->
+ <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+
+     <!-- Sidebar Toggle -->
+     <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+
+         <i class="fa fa-bars"></i>
+     </button>
+
+     <!-- Right Navbar -->
+     <ul class="navbar-nav ml-auto">
+
+         <!-- User Dropdown -->
+         @php
+             $authUserImage = Auth::user()->image;
+         @endphp
+
+
+         <li class="nav-item dropdown no-arrow">
+
+             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown">
+                 {{-- 
+                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">
+                     Customer
+                 </span> --}}
+                 @if ($authUserImage != null)
+                     <img class="img-profile rounded-circle" src="{{ $authUserImage }}">
+                 @else
+                     <img class="img-profile rounded-circle"
+                         src="https://cdn-icons-png.flaticon.com/512/149/149071.png">
+                 @endif
+
+             </a>
+
+             <!-- Dropdown Menu -->
+             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in">
+
+                 <a class="dropdown-item" href="{{ url('/customer/profile-view') }}">
+                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                     Profile
+                 </a>
+
+                 <a class="dropdown-item" href="{{ url('/customer/view-credentials') }}">
+                     <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+                     Credenatial Settings
+                 </a>
+
+                 <div class="dropdown-divider"></div>
+
+                 <a class="dropdown-item" href="{{ url('/customer/logout') }}">
+                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                     Logout
+                 </a>
+
+             </div>
+
+         </li>
+
+     </ul>
+
+ </nav>
+ <!-- End Topbar -->
+
+
+
+
+
+
+
+
+
+
+
+
+ if($order->courier_name == 'steadfast'){
+            $apiEndpoint = "https://portal.packzy.com/api/v1/create_order";
+
+            $header = [
+                'Api-Key' => "dqkv4qjckrwohgm8einj1zkswyjjzhz3",
+                'Secret-Key' => "qqogob5hdgfy5zdvbznyth7g",
+                'Content-Type' => "application/json"
+            ];

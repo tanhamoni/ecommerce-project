@@ -1,0 +1,219 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+		]
+	},
+	"buffers":
+	[
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"set syntax:h",
+				"Set Syntax: HAML"
+			],
+			[
+				"package control",
+				"Package Control: List Packages"
+			],
+			[
+				"install",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 0.0
+	},
+	"console":
+	{
+		"height": 0.0,
+		"history":
+		[
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/D/laragon/www/laravel-blog-project/app/Http/Controllers/Admin/AdminController.php",
+		"/D/laragon/www/laravel-blog-project/routes/web.php",
+		"/D/laragon/www/laravel-blog-project/config/app.php",
+		"/D/laragon/www/laravel-blog-project/resources/views/fronted/about-me.blade.php",
+		"/D/laragon/www/laravel-blog-project/resources/views/fronted/includes/footer.blade.php",
+		"/D/laragon/www/laravel-blog-project/app/Providers/AppServiceProvider.php",
+		"/D/laragon/www/laravel-blog-project/resources/views/fronted/blog-details.blade.php",
+		"/D/laragon/www/laravel-blog-project/resources/views/fronted/index.blade.php",
+		"/D/laragon/www/laravel-blog-project/app/Http/Controllers/Fronted/HomePageController.php",
+		"/D/laragon/www/laravel-blog-project/resources/views/admin/dashboard.blade.php",
+		"/D/laragon/www/laravel-blog-project/resources/views/admin/settings/messages.blade.php",
+		"/D/laragon/www/laravel-blog-project/resources/views/admin/settings/edit.blade.php",
+		"/D/laragon/www/laravel-blog-project/resources/views/fronted/contact-me.blade.php",
+		"/D/laragon/www/laravel-blog-project/resources/views/admin/includes/sidebar.blade.php",
+		"/D/laragon/www/laravel-blog-project/app/Http/Controllers/Admin/BlogController.php",
+		"/D/laragon/www/laravel-blog-project/app/Models/setting.php",
+		"/D/laragon/www/laravel-blog-project/resources/views/admin/blog/list.blade.php",
+		"/D/laragon/www/laravel-blog-project/resources/views/admin/blog/create.blade.php",
+		"/D/laragon/www/laravel-blog-project/resources/views/admin/blog/edit.blade.php",
+		"/D/laragon/www/laravel-blog-project/database/migrations/2026_04_12_071045_create_settings_table.php",
+		"/D/laragon/www/laravel-blog-project/database/seeders/settingsSeeder.php",
+		"/D/laragon/www/laravel-blog-project/database/seeders/DatabaseSeeder.php",
+		"/D/laragon/www/laravel-blog-project/database/migrations/2026_04_12_154111_create_contact_messages_table.php",
+		"/D/laragon/www/laravel-blog-project/database/migrations/2026_03_08_132141_create_blogs_table.php",
+		"/D/laragon/www/laravel-blog-project/resources/views/admin/includes/style.blade.php",
+		"/D/laragon/www/laravel-blog-project/resources/views/admin/includes/script.blade.php",
+		"/D/laragon/www/laravel-blog-project/resources/views/admin/includes/navbar.blade.php",
+		"/D/laragon/www/laravel-blog-project/resources/views/admin/includes/footer.blade.php",
+		"/D/laragon/www/laravel-blog-project/resources/views/admin/master.blade.php",
+		"/D/laragon/www/laravel-blog-project/resources/views/auth/login.blade.php",
+		"/D/laragon/www/laravel-blog-project/app/Http/Controllers/Auth/LoginController.php",
+		"/D/laragon/www/laravel-blog-project/app/Http/Controllers/Controller.php",
+		"/D/laragon/www/laravel-blog-project/.env",
+		"/D/laragon/www/laravel-blog-project/resources/views/fronted/master.blade.php",
+		"/D/laragon/www/laravel-blog-project/resources/views/fronted/includes/script.blade.php",
+		"/D/laragon/www/laravel-blog-project/resources/views/fronted/includes/navbar.blade.php",
+		"/C/Users/Tanha123/AppData/Roaming/Sublime Text/Packages/HTML-CSS-JS Prettify/HTMLPrettify.sublime-settings",
+		"/D/laragon/www/laravel-blog-project/resources/views/fronted/includes/style.blade.php"
+	],
+	"find":
+	{
+		"height": 28.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"scrollbar_highlights": true,
+		"show_context": true,
+		"use_buffer2": true,
+		"use_gitignore": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 28.0
+	},
+	"input":
+	{
+		"height": 40.8
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.find_results":
+	{
+		"height": 0.0,
+		"history":
+		[
+		]
+	},
+	"pinned_build_system": "",
+	"project": "contact-us.blade.sublime-project",
+	"replace":
+	{
+		"height": 52.8
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 303.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
