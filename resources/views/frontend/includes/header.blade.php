@@ -14,10 +14,10 @@
         <div class="container">
             <div class="header-top-wrapper">
                 <a href="{{ url('/') }}" class="brand-logo-outer">
-                    <img src="{{ $globalSiteSettings->logo }}" alt="Logo">
+                    <img src="{{ $globalSiteSettings?->logo }}" alt="Logo">
                 </a>
                 <div class="search-form-outer">
-                    <form action="{{url('search-products')}}" method="GET" class="form-group search-form">
+                    <form action="{{ url('search-products') }}" method="GET" class="form-group search-form">
                         @csrf
                         <input type="text" name="search" class="form-control" placeholder="Search for items...">
                         <button type="submit"><i class="fas fa-search"></i></button>
@@ -117,15 +117,15 @@
                                         <li class="header__category-list-item item-has-submenu">
                                             <a href="{{ url('/category-products/' . $category->slug) }}"
                                                 class="header__category-list-item-link">
-                                                <img src="{{$category->image}}" alt="category">
+                                                <img src="{{ $category->image }}" alt="category">
                                                 {{ $category->name }}
                                             </a>
                                             <ul class="header__nav-item-category-submenu">
                                                 @foreach ($category->subCategory as $subCategory)
                                                     <li class="header__category-submenu-item">
-                                                        <a href="{{ url('/subcategory-products/'.$subCategory->slug) }}"
+                                                        <a href="{{ url('/subcategory-products/' . $subCategory->slug) }}"
                                                             class="header__category-submenu-item-link">
-                                                            {{$subCategory->name}}
+                                                            {{ $subCategory->name }}
                                                         </a>
                                                     </li>
                                                 @endforeach
