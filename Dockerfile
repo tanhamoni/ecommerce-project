@@ -15,5 +15,5 @@ RUN chown -R www-data:www-data storage bootstrap/cache
 ENV APACHE_DOCUMENT_ROOT /var/www/html/public
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/conf-available/*.conf
-
+CMD php artisan migrate --force && apache2-foreground
 EXPOSE 80
