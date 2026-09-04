@@ -160,3 +160,75 @@
                 'Secret-Key' => "qqogob5hdgfy5zdvbznyth7g",
                 'Content-Type' => "application/json"
             ];
+
+
+
+
+
+
+
+
+
+
+
+            
+        if($order->courier_name == 'steadfast'){
+            $apiEndpoint = "https://portal.packzy.com/api/v1/create_order";
+
+            $header = [
+                'Api-Key' => "dqkv4qjckrwohgm8einj1zkswyjjzhz3",
+                'Secret-Key' => "qqogob5hdgfy5zdvbznyth7g",
+                'Content-Type' => "application/json"
+            ];
+
+            //Body Parametres...
+            $invoiceNumber = $order->invoice_number;
+            $customerName = $order->name;
+            $customerPhone = $order->phone;
+            $customerAddress = $order->address;
+            $price = $order->price;
+
+            $payLoad = [
+                'invoice' => $invoiceNumber,
+                'recipient_name' => $customerName,
+                'recipient_phone' => $customerPhone,
+                'recipient_address' => $customerAddress,
+                'cod_amount' => $price
+            ];
+
+           $response = Http::withoutVerifying()->withHeaders($header)->post($apiEndpoint,$payLoad);
+           $jsonData = $response->json();
+
+
+           if(isset($jsonData['consignment'])){
+                $order->status = 'delivered';
+                $order->consignment_id = $jsonData['consignment']['consignment_id'];
+                $order->tracking_code = $jsonData['consignment']['tracking_link'];
+
+                $order->save();
+           }
+        }
+        elseif($order->courier_name == 'pathao'){
+            
+        }
+        else{
+            toastr()->error('Select a courier');
+            return redirect()->back();
+        }
+
+
+        toastr()->success('Couirer entry is successful');
+        return redirect()->back();
+
+    }
+
+
+
+
+
+      $header = [
+                'Api-Key' => "dqkv4qjckrwohgm8einj1zkswyjjzhz3",
+                'Secret-Key' => "qqogob5hdgfy5zdvbznyth7g",
+                'Content-Type' => 'application/json',
+                'Accept' => 'application/json',
+            ];

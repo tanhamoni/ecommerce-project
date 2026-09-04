@@ -7,6 +7,7 @@ use App\Models\Order;
 use App\Models\OrderDetails;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class OrderController extends Controller
 {
@@ -64,7 +65,7 @@ class OrderController extends Controller
         return response()->json('Updated successfully');
     }
 
-     public function updateOrderStatus (Request $request, $id)
+    public function updateOrderStatus(Request $request, $id)
     {
         $order = Order::find($id);
         $order->status = $request->status;
@@ -73,72 +74,91 @@ class OrderController extends Controller
         return redirect()->back();
     }
 
-     public function couriarEntry ($order_id)
+    public function couriarEntry($order_id)
     {
-        $order = Order::find($order_id);
-        
+        $order = Order::findOrFail($order_id);
 
-        if($order->courier_name == 'steadfast'){
-            $apiEndpoint = "https://portal.packzy.com/api/v1/create_order";
+        if ($order->courier_name != 'steadfast') {
+            toastr()->error('Please select Steadfast courier.');
+            return back();
+        }
 
-            $header = [
+        if (empty(trim($order->name))) {
+            toastr()->error('Recipient name is required.');
+            return back();
+        }
+
+        if (!preg_match('/^01[3-9]\d{8}$/', trim($order->phone))) {
+            toastr()->error('Please enter a valid Bangladeshi mobile number.');
+            return back();
+        }
+
+        if (empty(trim($order->address))) {
+            toastr()->error('Recipient address is required.');
+            return back();
+        }
+
+        if (strlen(trim($order->address)) > 250) {
+            toastr()->error('Recipient address cannot be more than 250 characters.');
+            return back();
+        }
+
+        if ($order->price <= 0) {
+            toastr()->error('Invalid COD amount.');
+            return back();
+        }
+
+        $response = Http::withoutVerifying()
+            ->withHeaders([
                 'Api-Key' => "dqkv4qjckrwohgm8einj1zkswyjjzhz3",
                 'Secret-Key' => "qqogob5hdgfy5zdvbznyth7g",
                 'Content-Type' => "application/json"
-            ];
 
-            //Body Parametres...
-            $invoiceNumber = $order->invoice_number;
-            $customerName = $order->name;
-            $customerPhone = $order->phone;
-            $customerAddress = $order->address;
-            $price = $order->price;
+            ])
+            ->post('https://portal.packzy.com/api/v1/create_order', [
+                'invoice'           => $order->invoice_number,
+                'recipient_name'    => trim($order->name),
+                'recipient_phone'   => trim($order->phone),
+                'recipient_address' => trim($order->address),
+                'cod_amount'        => $order->price,
+            ]);
 
-            $payLoad = [
-                'invoice' => $invoiceNumber,
-                'recipient_name' => $customerName,
-                'recipient_phone' => $customerPhone,
-                'recipient_address' => $customerAddress,
-                'cod_amount' => $price
-            ];
+        $data = $response->json();
 
-           $response = Http::withoutVerifying()->withHeaders($header)->post($apiEndpoint,$payLoad);
-           $jsonData = $response->json();
+        if ($response->successful() && isset($data['consignment'])) {
 
+            $order->status = 'processing';
+            $order->consignment_id = $data['consignment']['consignment_id'];
+            $order->tracking_code = $data['consignment']['tracking_link'];
+            $order->save();
 
-           if(isset($jsonData['consignment'])){
-                $order->status = 'delivered';
-                $order->consignment_id = $jsonData['consignment']['consignment_id'];
-                $order->tracking_code = $jsonData['consignment']['tracking_link'];
+            toastr()->success('Courier entry successful.');
+        } else {
 
-                $order->save();
-           }
-        }
-        elseif($order->courier_name == 'pathao'){
-            
-        }
-        else{
-            toastr()->error('Select a courier');
-            return redirect()->back();
+            if (isset($data['errors'])) {
+                $message = '';
+
+                foreach ($data['errors'] as $errors) {
+                    $message .= implode('<br>', $errors) . '<br>';
+                }
+
+                toastr()->error($message);
+            } else {
+                toastr()->error($data['message'] ?? 'Courier entry failed.');
+            }
         }
 
-
-        toastr()->success('Couirer entry is successful');
-        return redirect()->back();
-
+        return back();
     }
 
-    public function printBulkInvoice (Request $request)
+    public function printBulkInvoice(Request $request)
     {
         $orders = Order::with('orderDetails')->whereIn('id', $request->order_id)->get();
 
-        foreach($orders as $order){
+        foreach ($orders as $order) {
             $order->is_printed = true;
             $order->save();
         }
         return view('admin.order.invoice', compact('orders'));
     }
-
-}  
-    
-
+}
