@@ -11,13 +11,15 @@ class SettingController extends Controller
 {
     public function websiteSettings()
     {
-        $websiteSettings = Setting::first();
+        // প্রথম রেকর্ড নেবে, না থাকলে ডাটাবেজে একটা খালি রেকর্ড তৈরি করে নেবে
+        $websiteSettings = Setting::firstOrCreate([]);
         return view('admin.settings.website-settings', compact('websiteSettings'));
     }
 
     public function updateSettings(Request $request)
     {
-        $websiteSettings = Setting::first() ?? new Setting();
+        // নিশ্চিতভাবে ডাটাবেজের আইডি সহ রেকর্ড নিয়ে আসা
+        $websiteSettings = Setting::firstOrCreate([]);
 
         $websiteSettings->phone = $request->phone;
         $websiteSettings->email = $request->email;
@@ -27,7 +29,6 @@ class SettingController extends Controller
         $websiteSettings->youtube = $request->youtube;
         $websiteSettings->instagram = $request->instagram;
 
-        // আপলোড ফোল্ডারের পাথ সেট এবং ফোল্ডার না থাকলে তৈরি করা
         $destinationPath = public_path('admin/settings');
         if (!file_exists($destinationPath)) {
             mkdir($destinationPath, 0777, true);
@@ -65,6 +66,7 @@ class SettingController extends Controller
             $websiteSettings->hero_image = asset('admin/settings/' . $imageName);
         }
 
+        // পরিবর্তন ডাটাবেজে ফোর্স সেভ
         $websiteSettings->save();
 
         toastr()->success('Settings updated successfully.');
@@ -73,13 +75,13 @@ class SettingController extends Controller
 
     public function websitePolicy()
     {
-        $policyDeta = WebsitePolicy::first();
+        $policyDeta = WebsitePolicy::firstOrCreate([]);
         return view('admin.settings.website-policy', compact('policyDeta'));
     }
 
     public function updatePolicy(Request $request)
     {
-        $policyDeta = WebsitePolicy::first() ?? new WebsitePolicy();
+        $policyDeta = WebsitePolicy::firstOrCreate([]);
         $policyDeta->privacy_policy = $request->privacy_policy;
         $policyDeta->terms_conditions = $request->terms_conditions;
         $policyDeta->refund_policy = $request->refund_policy;
