@@ -12,7 +12,7 @@
             <div class="container">
                 <div class="privacy-policy-content">
                     <div class="contant-des">
-                      {!!$privacyPolicy->privacy_policy!!}
+                   {!!$privacyPolicy?->privacy_policy!!}
                     </div>
                 </div>
             </div>

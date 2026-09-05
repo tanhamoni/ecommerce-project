@@ -12,7 +12,7 @@
             <div class="container">
                 <div class="privacy-policy-content">
                     <div class="contant-des">
-                        {!!$termsConditions->terms_conditions!!}
+                        {!!$termsConditions?->terms_conditions!!}
                     </div>
                 </div>
             </div>
