@@ -10,7 +10,11 @@ COPY . .
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 RUN composer install --no-dev --optimize-autoloader
-RUN chown -R www-data:www-data storage bootstrap/cache
+
+# Public ও Storage ফোল্ডারের রাইট পারমিশন এবং ওনারশিপ নিশ্চিত করা
+RUN mkdir -p public/admin/settings \
+    && chown -R www-data:www-data storage bootstrap/cache public \
+    && chmod -R 775 storage bootstrap/cache public
 
 ENV APACHE_DOCUMENT_ROOT /var/www/html/public
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
