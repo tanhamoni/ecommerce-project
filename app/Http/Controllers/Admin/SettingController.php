@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Setting;
 use App\Models\WebsitePolicy;
 use Illuminate\Http\Request;
-use Cloudinary\Configuration\Configuration;
 use Cloudinary\Api\Upload\UploadApi;
 
 class SettingController extends Controller
@@ -29,19 +28,22 @@ class SettingController extends Controller
         $websiteSettings->youtube = $request->youtube;
         $websiteSettings->instagram = $request->instagram;
 
-        // Cloudinary Configuration Object
-        $config = Configuration::instance();
-        $config->cloud->cloudName = 'zazc3c7b'; // প্রয়োজনে নতুন Cloud Name
-        $config->cloud->apiKey    = '239595857632991'; // প্রয়োজনে নতুন API Key
-        $config->cloud->apiSecret = '5kzAiJfZ91WpO5xw8-yULKs5SBg'; // নতুন API Secret এখানে দিন
-        $config->url->secure      = true;
+        // Direct Cloudinary Upload Configuration
+        $options = [
+            'cloud' => [
+                'cloud_name' => 'zazc3c7b',
+                'api_key'    => '239595857632991',
+                'api_secret' => '5kzAiJfZ91WpO5xw8-yULKs5SBg',
+            ]
+        ];
 
         $uploadApi = new UploadApi();
 
         // Logo Upload
         if ($request->hasFile('logo')) {
             $uploadedLogo = $uploadApi->upload(
-                $request->file('logo')->getRealPath()
+                $request->file('logo')->getRealPath(),
+                $options
             );
             $websiteSettings->logo = $uploadedLogo['secure_url'];
         }
@@ -49,7 +51,8 @@ class SettingController extends Controller
         // Hero Image Upload
         if ($request->hasFile('hero_image')) {
             $uploadedHero = $uploadApi->upload(
-                $request->file('hero_image')->getRealPath()
+                $request->file('hero_image')->getRealPath(),
+                $options
             );
             $websiteSettings->hero_image = $uploadedHero['secure_url'];
         }
