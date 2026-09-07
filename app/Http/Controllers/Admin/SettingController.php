@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Setting;
 use App\Models\WebsitePolicy;
 use Illuminate\Http\Request;
-use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
+use Cloudinary\Api\Upload\UploadApi;
 
 class SettingController extends Controller
 {
@@ -30,18 +30,29 @@ class SettingController extends Controller
         $websiteSettings->youtube = $request->youtube;
         $websiteSettings->instagram = $request->instagram;
 
-        // Logo Upload via Cloudinary
+        // Cloudinary Credentials Configuration
+        $cloudinaryConfig = [
+            'cloud_name' => 'zazc3c7b',
+            'api_key'    => '239595857632991',
+            'api_secret' => '5kzAiJfZ91WpO5xw8-yULKs5SBg',
+        ];
+
+        // Logo Upload via Direct Cloudinary API
         if ($request->hasFile('logo')) {
-            $websiteSettings->logo = Cloudinary::upload(
-                $request->file('logo')->getRealPath()
-            )->getSecurePath();
+            $uploadedLogo = (new UploadApi())->upload(
+                $request->file('logo')->getRealPath(),
+                $cloudinaryConfig
+            );
+            $websiteSettings->logo = $uploadedLogo['secure_url'];
         }
 
-        // Hero Image Upload via Cloudinary
+        // Hero Image Upload via Direct Cloudinary API
         if ($request->hasFile('hero_image')) {
-            $websiteSettings->hero_image = Cloudinary::upload(
-                $request->file('hero_image')->getRealPath()
-            )->getSecurePath();
+            $uploadedHero = (new UploadApi())->upload(
+                $request->file('hero_image')->getRealPath(),
+                $cloudinaryConfig
+            );
+            $websiteSettings->hero_image = $uploadedHero['secure_url'];
         }
 
         // পরিবর্তন ডাটাবেজে ফোর্স সেভ
