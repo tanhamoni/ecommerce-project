@@ -29,8 +29,12 @@ class SettingController extends Controller
         $websiteSettings->youtube = $request->youtube;
         $websiteSettings->instagram = $request->instagram;
 
-        // Configure Cloudinary Globally using explicit URL
-        Configuration::instance('cloudinary://239595857632991:5kzAiJfZ91WpO5xw8-yULKs5SBg@zazc3c7b?secure=true');
+        // Cloudinary Configuration Object
+        $config = Configuration::instance();
+        $config->cloud->cloudName = 'zazc3c7b'; // প্রয়োজনে নতুন Cloud Name
+        $config->cloud->apiKey    = '239595857632991'; // প্রয়োজনে নতুন API Key
+        $config->cloud->apiSecret = '5kzAiJfZ91WpO5xw8-yULKs5SBg'; // নতুন API Secret এখানে দিন
+        $config->url->secure      = true;
 
         $uploadApi = new UploadApi();
 
