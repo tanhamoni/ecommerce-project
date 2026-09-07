@@ -34,6 +34,13 @@ return [
     'cloud_url' => env('CLOUDINARY_URL', 'cloudinary://239595857632991:5kzAiJfZ91WpO5xw8-yULKs5SBg@zazc3c7b'),
 
     /**
+     * Direct Credentials Fallback
+     */
+    'cloud_name' => env('CLOUDINARY_CLOUD_NAME', 'zazc3c7b'),
+    'api_key'    => env('CLOUDINARY_API_KEY', '239595857632991'),
+    'api_secret' => env('CLOUDINARY_API_SECRET', '5kzAiJfZ91WpO5xw8-yULKs5SBg'),
+
+    /**
      * Upload Preset From Cloudinary Dashboard
      */
     'upload_preset' => env('CLOUDINARY_UPLOAD_PRESET'),
