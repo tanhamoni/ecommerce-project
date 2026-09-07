@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Setting;
 use App\Models\WebsitePolicy;
 use Illuminate\Http\Request;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 
 class SettingController extends Controller
 {
@@ -18,7 +19,7 @@ class SettingController extends Controller
 
     public function updateSettings(Request $request)
     {
-        // নিশ্চিতভাবে ডাটাবেজের আইডি সহ রেকর্ড নিয়ে আসা
+        // নিশ্চিতভাবে ডাটাবেজের আইডি সহ রেকর্ড নিয়ে আসা
         $websiteSettings = Setting::firstOrCreate([]);
 
         $websiteSettings->phone = $request->phone;
@@ -29,41 +30,18 @@ class SettingController extends Controller
         $websiteSettings->youtube = $request->youtube;
         $websiteSettings->instagram = $request->instagram;
 
-        $destinationPath = public_path('admin/settings');
-        if (!file_exists($destinationPath)) {
-            mkdir($destinationPath, 0777, true);
-        }
-
-        // Logo Upload
+        // Logo Upload via Cloudinary
         if ($request->hasFile('logo')) {
-            if ($websiteSettings->logo) {
-                $oldLogo = public_path('admin/settings/' . basename($websiteSettings->logo));
-                if (file_exists($oldLogo) && is_file($oldLogo)) {
-                    @unlink($oldLogo);
-                }
-            }
-
-            $image = $request->file('logo');
-            $imageName = time() . '_logo.' . $image->getClientOriginalExtension();
-            $image->move($destinationPath, $imageName);
-
-            $websiteSettings->logo = asset('admin/settings/' . $imageName);
+            $websiteSettings->logo = Cloudinary::upload(
+                $request->file('logo')->getRealPath()
+            )->getSecurePath();
         }
 
-        // Hero Image Upload
+        // Hero Image Upload via Cloudinary
         if ($request->hasFile('hero_image')) {
-            if ($websiteSettings->hero_image) {
-                $oldHero = public_path('admin/settings/' . basename($websiteSettings->hero_image));
-                if (file_exists($oldHero) && is_file($oldHero)) {
-                    @unlink($oldHero);
-                }
-            }
-
-            $image = $request->file('hero_image');
-            $imageName = time() . '_hero.' . $image->getClientOriginalExtension();
-            $image->move($destinationPath, $imageName);
-
-            $websiteSettings->hero_image = asset('admin/settings/' . $imageName);
+            $websiteSettings->hero_image = Cloudinary::upload(
+                $request->file('hero_image')->getRealPath()
+            )->getSecurePath();
         }
 
         // পরিবর্তন ডাটাবেজে ফোর্স সেভ
