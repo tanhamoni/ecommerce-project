@@ -6,20 +6,19 @@ use App\Http\Controllers\Controller;
 use App\Models\Setting;
 use App\Models\WebsitePolicy;
 use Illuminate\Http\Request;
+use Cloudinary\Configuration\Configuration;
 use Cloudinary\Api\Upload\UploadApi;
 
 class SettingController extends Controller
 {
     public function websiteSettings()
     {
-        // প্রথম রেকর্ড নেবে, না থাকলে ডাটাবেজে একটা খালি রেকর্ড তৈরি করে নেবে
         $websiteSettings = Setting::firstOrCreate([]);
         return view('admin.settings.website-settings', compact('websiteSettings'));
     }
 
     public function updateSettings(Request $request)
     {
-        // নিশ্চিতভাবে ডাটাবেজের আইডি সহ রেকর্ড নিয়ে আসা
         $websiteSettings = Setting::firstOrCreate([]);
 
         $websiteSettings->phone = $request->phone;
@@ -30,32 +29,27 @@ class SettingController extends Controller
         $websiteSettings->youtube = $request->youtube;
         $websiteSettings->instagram = $request->instagram;
 
-        // Cloudinary Credentials Configuration
-        $cloudinaryConfig = [
-            'cloud_name' => 'zazc3c7b',
-            'api_key'    => '239595857632991',
-            'api_secret' => '5kzAiJfZ91WpO5xw8-yULKs5SBg',
-        ];
+        // Configure Cloudinary Globally using explicit URL
+        Configuration::instance('cloudinary://239595857632991:5kzAiJfZ91WpO5xw8-yULKs5SBg@zazc3c7b?secure=true');
 
-        // Logo Upload via Direct Cloudinary API
+        $uploadApi = new UploadApi();
+
+        // Logo Upload
         if ($request->hasFile('logo')) {
-            $uploadedLogo = (new UploadApi())->upload(
-                $request->file('logo')->getRealPath(),
-                $cloudinaryConfig
+            $uploadedLogo = $uploadApi->upload(
+                $request->file('logo')->getRealPath()
             );
             $websiteSettings->logo = $uploadedLogo['secure_url'];
         }
 
-        // Hero Image Upload via Direct Cloudinary API
+        // Hero Image Upload
         if ($request->hasFile('hero_image')) {
-            $uploadedHero = (new UploadApi())->upload(
-                $request->file('hero_image')->getRealPath(),
-                $cloudinaryConfig
+            $uploadedHero = $uploadApi->upload(
+                $request->file('hero_image')->getRealPath()
             );
             $websiteSettings->hero_image = $uploadedHero['secure_url'];
         }
 
-        // পরিবর্তন ডাটাবেজে ফোর্স সেভ
         $websiteSettings->save();
 
         toastr()->success('Settings updated successfully.');
