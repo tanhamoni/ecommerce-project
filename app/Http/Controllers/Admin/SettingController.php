@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Setting;
 use App\Models\WebsitePolicy;
 use Illuminate\Http\Request;
+use Cloudinary\Configuration\Configuration;
 use Cloudinary\Api\Upload\UploadApi;
 
 class SettingController extends Controller
@@ -28,22 +29,19 @@ class SettingController extends Controller
         $websiteSettings->youtube = $request->youtube;
         $websiteSettings->instagram = $request->instagram;
 
-        // Direct Cloudinary Upload Configuration
-        $options = [
+        // Directly pass config array into UploadApi constructor
+        $uploadApi = new UploadApi([
             'cloud' => [
                 'cloud_name' => 'zazc3c7b',
                 'api_key'    => '239595857632991',
                 'api_secret' => '5kzAiJfZ91WpO5xw8-yULKs5SBg',
             ]
-        ];
-
-        $uploadApi = new UploadApi();
+        ]);
 
         // Logo Upload
         if ($request->hasFile('logo')) {
             $uploadedLogo = $uploadApi->upload(
-                $request->file('logo')->getRealPath(),
-                $options
+                $request->file('logo')->getRealPath()
             );
             $websiteSettings->logo = $uploadedLogo['secure_url'];
         }
@@ -51,8 +49,7 @@ class SettingController extends Controller
         // Hero Image Upload
         if ($request->hasFile('hero_image')) {
             $uploadedHero = $uploadApi->upload(
-                $request->file('hero_image')->getRealPath(),
-                $options
+                $request->file('hero_image')->getRealPath()
             );
             $websiteSettings->hero_image = $uploadedHero['secure_url'];
         }
