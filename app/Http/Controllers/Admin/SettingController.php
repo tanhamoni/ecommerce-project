@@ -6,8 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Setting;
 use App\Models\WebsitePolicy;
 use Illuminate\Http\Request;
-use Cloudinary\Configuration\Configuration;
-use Cloudinary\Api\Upload\UploadApi;
+use Illuminate\Support\Facades\Http;
 
 class SettingController extends Controller
 {
@@ -29,35 +28,38 @@ class SettingController extends Controller
         $websiteSettings->youtube = $request->youtube;
         $websiteSettings->instagram = $request->instagram;
 
-        // Configure Cloudinary explicitly via Configuration instance
-        $config = new Configuration([
-            'cloud' => [
-                'cloud_name' => 'zazc3c7b'
-            ]
-        ]);
-
-        $uploadApi = new UploadApi($config);
-
-        $options = [
-            'upload_preset' => 'sjdi3oza',
-        ];
+        $cloudName = 'zazc3c7b';
+        $uploadPreset = 'sjdi3oza';
+        $cloudinaryUrl = "https://api.cloudinary.com/v1_1/{$cloudName}/image/upload";
 
         // Logo Upload
         if ($request->hasFile('logo')) {
-            $uploadedLogo = $uploadApi->upload(
-                $request->file('logo')->getRealPath(),
-                $options
-            );
-            $websiteSettings->logo = $uploadedLogo['secure_url'];
+            $response = Http::attach(
+                'file', 
+                file_get_contents($request->file('logo')->getRealPath()), 
+                $request->file('logo')->getClientOriginalName()
+            )->post($cloudinaryUrl, [
+                'upload_preset' => $uploadPreset,
+            ]);
+
+            if ($response->successful()) {
+                $websiteSettings->logo = $response->json()['secure_url'];
+            }
         }
 
         // Hero Image Upload
         if ($request->hasFile('hero_image')) {
-            $uploadedHero = $uploadApi->upload(
-                $request->file('hero_image')->getRealPath(),
-                $options
-            );
-            $websiteSettings->hero_image = $uploadedHero['secure_url'];
+            $response = Http::attach(
+                'file', 
+                file_get_contents($request->file('hero_image')->getRealPath()), 
+                $request->file('hero_image')->getClientOriginalName()
+            )->post($cloudinaryUrl, [
+                'upload_preset' => $uploadPreset,
+            ]);
+
+            if ($response->successful()) {
+                $websiteSettings->hero_image = $response->json()['secure_url'];
+            }
         }
 
         $websiteSettings->save();
