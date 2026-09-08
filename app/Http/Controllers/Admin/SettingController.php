@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Setting;
 use App\Models\WebsitePolicy;
 use Illuminate\Http\Request;
+use Cloudinary\Configuration\Configuration;
 use Cloudinary\Api\Upload\UploadApi;
 
 class SettingController extends Controller
@@ -28,13 +29,18 @@ class SettingController extends Controller
         $websiteSettings->youtube = $request->youtube;
         $websiteSettings->instagram = $request->instagram;
 
-        // Unsigned Config Options
+        // Configure Cloudinary explicitly via Configuration instance
+        $config = new Configuration([
+            'cloud' => [
+                'cloud_name' => 'zazc3c7b'
+            ]
+        ]);
+
+        $uploadApi = new UploadApi($config);
+
         $options = [
-            'cloud_name'    => 'zazc3c7b',
             'upload_preset' => 'sjdi3oza',
         ];
-
-        $uploadApi = new UploadApi();
 
         // Logo Upload
         if ($request->hasFile('logo')) {
