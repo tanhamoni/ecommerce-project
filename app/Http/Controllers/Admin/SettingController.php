@@ -19,7 +19,7 @@ class SettingController extends Controller
     {
         $websiteSettings = Setting::firstOrCreate([]);
 
-        // ১. টেক্সট ও সোশ্যাল লিঙ্ক অ্যাসাইন
+        // সাধারণ তথ্য ও সোশ্যাল লিঙ্ক সেভ
         $websiteSettings->phone = $request->phone;
         $websiteSettings->email = $request->email;
         $websiteSettings->address = $request->address;
@@ -28,23 +28,10 @@ class SettingController extends Controller
         $websiteSettings->youtube = $request->youtube;
         $websiteSettings->instagram = $request->instagram;
 
-        // ২. লোকাল লোগো আপলোড
-        if ($request->hasFile('logo')) {
-            $logo = $request->file('logo');
-            $logoName = time() . '_logo.' . $logo->getClientOriginalExtension();
-            $logo->move(public_path('uploads/settings'), $logoName);
-            $websiteSettings->logo = asset('uploads/settings/' . $logoName);
-        }
+        // ছবির টেক্সট লিঙ্ক সেভ (ফাইল আপলোডের জটিলতা ছাড়া)
+        $websiteSettings->logo = $request->logo;
+        $websiteSettings->hero_image = $request->hero_image;
 
-        // ৩. লোকাল হিরো ইমেজ আপলোড
-        if ($request->hasFile('hero_image')) {
-            $hero = $request->file('hero_image');
-            $heroName = time() . '_hero.' . $hero->getClientOriginalExtension();
-            $hero->move(public_path('uploads/settings'), $heroName);
-            $websiteSettings->hero_image = asset('uploads/settings/' . $heroName);
-        }
-
-        // ৪. ডাটাবেসে চূড়ান্ত সেভ
         $websiteSettings->save();
 
         toastr()->success('Settings updated successfully.');
