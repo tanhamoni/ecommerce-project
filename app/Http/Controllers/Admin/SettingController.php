@@ -20,6 +20,7 @@ class SettingController extends Controller
     {
         $websiteSettings = Setting::firstOrCreate([]);
 
+        // টেক্সট ডাটা অ্যাসাইন
         $websiteSettings->phone = $request->phone;
         $websiteSettings->email = $request->email;
         $websiteSettings->address = $request->address;
@@ -46,9 +47,8 @@ class SettingController extends Controller
             if ($response->successful()) {
                 $websiteSettings->logo = $response->json()['secure_url'];
             } else {
-                $errorDetails = $response->json()['error']['message'] ?? 'Cloudinary error';
-                toastr()->error('Logo upload failed: ' . $errorDetails);
-                return redirect()->back();
+                $errorMsg = $response->json()['error']['message'] ?? 'Logo upload failed';
+                toastr()->error('Logo Error: ' . $errorMsg);
             }
         }
 
@@ -66,12 +66,12 @@ class SettingController extends Controller
             if ($response->successful()) {
                 $websiteSettings->hero_image = $response->json()['secure_url'];
             } else {
-                $errorDetails = $response->json()['error']['message'] ?? 'Cloudinary error';
-                toastr()->error('Hero Image upload failed: ' . $errorDetails);
-                return redirect()->back();
+                $errorMsg = $response->json()['error']['message'] ?? 'Hero image upload failed';
+                toastr()->error('Hero Image Error: ' . $errorMsg);
             }
         }
 
+        // ডাটাবেসে তথ্য সংরক্ষণ
         $websiteSettings->save();
 
         toastr()->success('Settings updated successfully.');
