@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Setting;
 use App\Models\WebsitePolicy;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
 
 class SettingController extends Controller
 {
@@ -20,7 +19,7 @@ class SettingController extends Controller
     {
         $websiteSettings = Setting::firstOrCreate([]);
 
-        // টেক্সট ডাটা অ্যাসাইন
+        // ১. টেক্সট ও সোশ্যাল লিঙ্ক অ্যাসাইন
         $websiteSettings->phone = $request->phone;
         $websiteSettings->email = $request->email;
         $websiteSettings->address = $request->address;
@@ -29,49 +28,23 @@ class SettingController extends Controller
         $websiteSettings->youtube = $request->youtube;
         $websiteSettings->instagram = $request->instagram;
 
-        $cloudName = 'zazc3c7b';
-        $uploadPreset = 'sjdi3oza';
-        $cloudinaryUrl = "https://api.cloudinary.com/v1_1/{$cloudName}/image/upload";
-
-        // Logo Upload
+        // ২. লোকাল লোগো আপলোড
         if ($request->hasFile('logo')) {
-            $logoFile = $request->file('logo');
-            $response = Http::attach(
-                'file', 
-                file_get_contents($logoFile->getRealPath()), 
-                $logoFile->getClientOriginalName()
-            )->post($cloudinaryUrl, [
-                'upload_preset' => $uploadPreset,
-            ]);
-
-            if ($response->successful()) {
-                $websiteSettings->logo = $response->json()['secure_url'];
-            } else {
-                $errorMsg = $response->json()['error']['message'] ?? 'Logo upload failed';
-                toastr()->error('Logo Error: ' . $errorMsg);
-            }
+            $logo = $request->file('logo');
+            $logoName = time() . '_logo.' . $logo->getClientOriginalExtension();
+            $logo->move(public_path('uploads/settings'), $logoName);
+            $websiteSettings->logo = asset('uploads/settings/' . $logoName);
         }
 
-        // Hero Image Upload
+        // ৩. লোকাল হিরো ইমেজ আপলোড
         if ($request->hasFile('hero_image')) {
-            $heroFile = $request->file('hero_image');
-            $response = Http::attach(
-                'file', 
-                file_get_contents($heroFile->getRealPath()), 
-                $heroFile->getClientOriginalName()
-            )->post($cloudinaryUrl, [
-                'upload_preset' => $uploadPreset,
-            ]);
-
-            if ($response->successful()) {
-                $websiteSettings->hero_image = $response->json()['secure_url'];
-            } else {
-                $errorMsg = $response->json()['error']['message'] ?? 'Hero image upload failed';
-                toastr()->error('Hero Image Error: ' . $errorMsg);
-            }
+            $hero = $request->file('hero_image');
+            $heroName = time() . '_hero.' . $hero->getClientOriginalExtension();
+            $hero->move(public_path('uploads/settings'), $heroName);
+            $websiteSettings->hero_image = asset('uploads/settings/' . $heroName);
         }
 
-        // ডাটাবেসে তথ্য সংরক্ষণ
+        // ৪. ডাটাবেসে চূড়ান্ত সেভ
         $websiteSettings->save();
 
         toastr()->success('Settings updated successfully.');
