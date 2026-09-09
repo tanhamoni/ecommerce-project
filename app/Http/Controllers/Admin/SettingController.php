@@ -19,19 +19,38 @@ class SettingController extends Controller
     {
         $websiteSettings = Setting::firstOrCreate([]);
 
-        // সাধারণ তথ্য ও সোশ্যাল লিঙ্ক সেভ
+        // ১. সাধারণ তথ্য
         $websiteSettings->phone = $request->phone;
         $websiteSettings->email = $request->email;
         $websiteSettings->address = $request->address;
-        $websiteSettings->facebook = $request->facebook;
-        $websiteSettings->twitter = $request->twitter;
-        $websiteSettings->youtube = $request->youtube;
-        $websiteSettings->instagram = $request->instagram;
 
-        // ছবির টেক্সট লিঙ্ক সেভ (ফাইল আপলোডের জটিলতা ছাড়া)
-        $websiteSettings->logo = $request->logo;
-        $websiteSettings->hero_image = $request->hero_image;
+        // ২. সোশ্যাল লিঙ্ক (ফাঁকা থাকলেও যেন Not Null Error না দেয়)
+        $websiteSettings->facebook = $request->facebook ?? '';
+        $websiteSettings->twitter = $request->twitter ?? '';
+        $websiteSettings->youtube = $request->youtube ?? '';
+        $websiteSettings->instagram = $request->instagram ?? '';
 
+        // ৩. লোগো (নতুন ফাইল দিলে সেভ হবে, না দিলে আগেরটাই থাকবে)
+        if ($request->hasFile('logo')) {
+            $logo = $request->file('logo');
+            $logoName = time() . '_logo.' . $logo->getClientOriginalExtension();
+            $logo->move(public_path('uploads/settings'), $logoName);
+            $websiteSettings->logo = asset('uploads/settings/' . $logoName);
+        } else {
+            $websiteSettings->logo = $websiteSettings->logo ?? '';
+        }
+
+        // ৪. হিরো ইমেজ (নতুন ফাইল দিলে সেভ হবে, না দিলে আগেরটাই থাকবে)
+        if ($request->hasFile('hero_image')) {
+            $hero = $request->file('hero_image');
+            $heroName = time() . '_hero.' . $hero->getClientOriginalExtension();
+            $hero->move(public_path('uploads/settings'), $heroName);
+            $websiteSettings->hero_image = asset('uploads/settings/' . $heroName);
+        } else {
+            $websiteSettings->hero_image = $websiteSettings->hero_image ?? '';
+        }
+
+        // ৫. সেভ
         $websiteSettings->save();
 
         toastr()->success('Settings updated successfully.');
