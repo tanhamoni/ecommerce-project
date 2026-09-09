@@ -46,8 +46,8 @@ class SettingController extends Controller
             if ($response->successful()) {
                 $websiteSettings->logo = $response->json()['secure_url'];
             } else {
-                $errorMsg = $response->json()['error']['message'] ?? 'Cloudinary Logo Upload Failed';
-                toastr()->error('Logo: ' . $errorMsg);
+                $errorDetails = $response->json()['error']['message'] ?? 'Cloudinary error';
+                toastr()->error('Logo upload failed: ' . $errorDetails);
                 return redirect()->back();
             }
         }
@@ -66,8 +66,8 @@ class SettingController extends Controller
             if ($response->successful()) {
                 $websiteSettings->hero_image = $response->json()['secure_url'];
             } else {
-                $errorMsg = $response->json()['error']['message'] ?? 'Cloudinary Hero Image Upload Failed';
-                toastr()->error('Hero Image: ' . $errorMsg);
+                $errorDetails = $response->json()['error']['message'] ?? 'Cloudinary error';
+                toastr()->error('Hero Image upload failed: ' . $errorDetails);
                 return redirect()->back();
             }
         }
