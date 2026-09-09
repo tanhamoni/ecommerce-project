@@ -34,31 +34,41 @@ class SettingController extends Controller
 
         // Logo Upload
         if ($request->hasFile('logo')) {
+            $logoFile = $request->file('logo');
             $response = Http::attach(
                 'file', 
-                file_get_contents($request->file('logo')->getRealPath()), 
-                $request->file('logo')->getClientOriginalName()
+                file_get_contents($logoFile->getRealPath()), 
+                $logoFile->getClientOriginalName()
             )->post($cloudinaryUrl, [
                 'upload_preset' => $uploadPreset,
             ]);
 
             if ($response->successful()) {
                 $websiteSettings->logo = $response->json()['secure_url'];
+            } else {
+                $errorMsg = $response->json()['error']['message'] ?? 'Cloudinary Logo Upload Failed';
+                toastr()->error('Logo: ' . $errorMsg);
+                return redirect()->back();
             }
         }
 
         // Hero Image Upload
         if ($request->hasFile('hero_image')) {
+            $heroFile = $request->file('hero_image');
             $response = Http::attach(
                 'file', 
-                file_get_contents($request->file('hero_image')->getRealPath()), 
-                $request->file('hero_image')->getClientOriginalName()
+                file_get_contents($heroFile->getRealPath()), 
+                $heroFile->getClientOriginalName()
             )->post($cloudinaryUrl, [
                 'upload_preset' => $uploadPreset,
             ]);
 
             if ($response->successful()) {
                 $websiteSettings->hero_image = $response->json()['secure_url'];
+            } else {
+                $errorMsg = $response->json()['error']['message'] ?? 'Cloudinary Hero Image Upload Failed';
+                toastr()->error('Hero Image: ' . $errorMsg);
+                return redirect()->back();
             }
         }
 
