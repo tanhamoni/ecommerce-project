@@ -12,31 +12,31 @@ use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any application services.
-     */
     public function register(): void
     {
         //
     }
 
-    /**
-     * Bootstrap any application services.
-     */
     public function boot(): void
     {
-        
         if (app()->environment('production') || config('app.env') === 'production') {
             URL::forceScheme('https');
         }
 
-        
         FacadesView::composer('*', function ($view) {
-            $view->with('globalSiteSettings', Setting::first());
-            $view->with('globalCarts', Cart::where('ip_address', request()->ip())->with('product')->get());
-            $view->with('globalCartCount', Cart::where('ip_address', request()->ip())->count());
-            $view->with('globalCategories', Category::orderBy('name', 'asc')->with('subCategory')->get());
-            $view->with('globalSubCategories', SubCategory::orderBy('name', 'asc')->get());
+            try {
+                $view->with('globalSiteSettings', Setting::first());
+                $view->with('globalCarts', Cart::where('ip_address', request()->ip())->with('product')->get());
+                $view->with('globalCartCount', Cart::where('ip_address', request()->ip())->count());
+                $view->with('globalCategories', Category::orderBy('name', 'asc')->with('subCategory')->get());
+                $view->with('globalSubCategories', SubCategory::orderBy('name', 'asc')->get());
+            } catch (\Exception $e) {
+                $view->with('globalSiteSettings', null);
+                $view->with('globalCarts', collect());
+                $view->with('globalCartCount', 0);
+                $view->with('globalCategories', collect());
+                $view->with('globalSubCategories', collect());
+            }
         });
     }
 }
